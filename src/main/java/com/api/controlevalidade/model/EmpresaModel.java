@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "tbl_Empresa", schema = "ControleValidade")
+@Table(name = "tbl_Empresa")
 public class EmpresaModel {
 
     @Id
