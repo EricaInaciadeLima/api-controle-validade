@@ -1,8 +1,11 @@
 package com.api.controlevalidade.controller;
 
-import com.api.controlevalidade.service.EmpresaService;
-import com.api.controlevalidade.model.EmpresaModel;
+import com.api.controlevalidade.model.PerfilModel;
+import com.api.controlevalidade.model.ProdutoModel;
+import com.api.controlevalidade.service.PerfilService;
+import com.api.controlevalidade.service.ProdutoService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -13,19 +16,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/empresa")
-public class EmpresaController {
+@RequestMapping("/perfil")
+public class PerfilController {
 
-    private final EmpresaService empresaService;
 
-    public EmpresaController(EmpresaService empresaService) {
-        this.empresaService = empresaService;
+    private final PerfilService perfilService;
+
+    public PerfilController(PerfilService perfilService) {
+        this.perfilService = perfilService;
     }
 
+
     @PostMapping
-    public ResponseEntity<EmpresaModel> criarEmpresa(@Valid @RequestBody EmpresaModel empresa) {
-        EmpresaModel criada = empresaService.save(empresa);
-        return ResponseEntity.status(HttpStatus.CREATED).body(criada);
+    public ResponseEntity<PerfilModel> criarPerfil(@Valid @RequestBody PerfilModel perfil) {
+        PerfilModel criado = perfilService.save(perfil);
+        return ResponseEntity.status(HttpStatus.CREATED).body(criado);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
