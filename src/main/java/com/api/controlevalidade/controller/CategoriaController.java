@@ -1,7 +1,8 @@
 package com.api.controlevalidade.controller;
 
-import com.api.controlevalidade.service.EmpresaService;
-import com.api.controlevalidade.model.EmpresaModel;
+import com.api.controlevalidade.model.CategoriaModel;
+import com.api.controlevalidade.model.ProdutoModel;
+import com.api.controlevalidade.service.CategoriaService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,18 +14,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/empresa")
-public class EmpresaController {
+@RequestMapping("/categoria")
+public class CategoriaController {
 
-    private final EmpresaService empresaService;
+    private final CategoriaService categoriaService;
 
-    public EmpresaController(EmpresaService empresaService) {
-        this.empresaService = empresaService;
+    public CategoriaController(CategoriaService categoriaService) {
+        this.categoriaService = categoriaService;
     }
 
     @PostMapping
-    public ResponseEntity<EmpresaModel> criarEmpresa(@Valid @RequestBody EmpresaModel empresa) {
-        EmpresaModel criada = empresaService.save(empresa);
+    public ResponseEntity<CategoriaModel> criarCategoria(@Valid @RequestBody CategoriaModel categoria) {
+        CategoriaModel criada = categoriaService.save(categoria);
         return ResponseEntity.status(HttpStatus.CREATED).body(criada);
     }
 
