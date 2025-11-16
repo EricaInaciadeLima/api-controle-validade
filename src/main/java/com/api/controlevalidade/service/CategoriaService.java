@@ -5,8 +5,11 @@ import com.api.controlevalidade.repository.CategoriaRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
+import java.util.List;import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @Service
 public class CategoriaService {
+    private static final Logger logger = LoggerFactory.getLogger(CategoriaService.class);
 
     private final CategoriaRepository categoriaRepository;
 
@@ -14,7 +17,12 @@ public class CategoriaService {
         this.categoriaRepository = categoriaRepository;
     }
 
-    public CategoriaModel save(@Valid CategoriaModel categoria) {
-        return  categoriaRepository.save(categoria);
+    public CategoriaModel salvarCategoria(@Valid CategoriaModel categoria) {
+        logger.debug("Salvando categoria: {}", categoria);
+        return categoriaRepository.save(categoria);
+    }
+
+    public List<CategoriaModel> buscarTodos() {
+        return categoriaRepository.findAll();
     }
 }

@@ -22,18 +22,11 @@ public class EmpresaController {
         this.empresaService = empresaService;
     }
 
-    @PostMapping
-    public ResponseEntity<EmpresaModel> criarEmpresa(@Valid @RequestBody EmpresaModel empresa) {
+    @PostMapping("/cadastro")
+    public ResponseEntity<EmpresaModel> criar(@Valid @RequestBody EmpresaModel empresa) {
         EmpresaModel criada = empresaService.save(empresa);
         return ResponseEntity.status(HttpStatus.CREATED).body(criada);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.put(error.getField(), error.getDefaultMessage());
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-    }
+
 }

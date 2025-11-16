@@ -17,4 +17,8 @@ public class PerfilService {
     public PerfilModel save(@Valid PerfilModel perfil) {
         return perfilRepository.save(perfil);
     }
+
+    public PerfilModel findByNomePerfil(String nomePerfil) {
+        return perfilRepository.findByNomePerfil(nomePerfil);
+    }
 }

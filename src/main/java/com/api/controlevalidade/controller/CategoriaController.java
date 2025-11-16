@@ -1,7 +1,6 @@
 package com.api.controlevalidade.controller;
 
 import com.api.controlevalidade.model.CategoriaModel;
-import com.api.controlevalidade.model.ProdutoModel;
 import com.api.controlevalidade.service.CategoriaService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -11,11 +10,15 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/categoria")
 public class CategoriaController {
+    private static final Logger logger = LoggerFactory.getLogger(CategoriaController.class);
 
     private final CategoriaService categoriaService;
 
@@ -23,18 +26,19 @@ public class CategoriaController {
         this.categoriaService = categoriaService;
     }
 
-    @PostMapping
+    @PostMapping("/cadastro")
     public ResponseEntity<CategoriaModel> criarCategoria(@Valid @RequestBody CategoriaModel categoria) {
-        CategoriaModel criada = categoriaService.save(categoria);
+        logger.info("Recebendo categoria para cadastro: {}", categoria);
+        CategoriaModel criada = categoriaService.salvarCategoria(categoria);
+        logger.info("Categoria criada com ID: {}", criada.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(criada);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.put(error.getField(), error.getDefaultMessage());
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    @GetMapping
+    public ResponseEntity<List<CategoriaModel>> listarCategorias() {
+        List<CategoriaModel> categorias = categoriaService.buscarTodos();
+        return ResponseEntity.ok(categorias);
     }
+
+
 }
