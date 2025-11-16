@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "tbl_Produto", schema = "ControleValidade")
+@Table(name = "tbl_Produto")
 public class ProdutoModel {
 
     @Id

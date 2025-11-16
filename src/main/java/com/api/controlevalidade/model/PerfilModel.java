@@ -1,11 +1,12 @@
 package com.api.controlevalidade.model;
 
+import com.api.controlevalidade.model.tiposEnuns.TipoPerfil;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "tbl_Perfil", schema = "ControleValidade")
+@Table(name = "tbl_Perfil")
 public class PerfilModel {
 
     @Id
@@ -25,6 +26,11 @@ public class PerfilModel {
     @ManyToOne(optional = false)
     @JoinColumn(name = "empresa_id", nullable = false)
     private EmpresaModel empresa;
+
+    @NotBlank(message = "Tipo de perfil é obrigatório!")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_perfil", nullable = false, length = 20)
+    private TipoPerfil tipoPerfil;
 
     public PerfilModel() {}
 
@@ -60,5 +66,13 @@ public class PerfilModel {
 
     public void setEmpresa(EmpresaModel empresa) {
         this.empresa = empresa;
+    }
+
+    public TipoPerfil getTipoPerfil() {
+        return tipoPerfil;
+    }
+
+    public void setTipoPerfil(TipoPerfil tipoPerfil) {
+        this.tipoPerfil = tipoPerfil;
     }
 }

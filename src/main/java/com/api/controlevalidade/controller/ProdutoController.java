@@ -15,10 +15,9 @@ package com.api.controlevalidade.controller;
         import org.springframework.web.bind.annotation.RestController;
 
         import java.util.HashMap;
-        import java.util.List;
         import java.util.Map;
 
-@RestController
+        @RestController
         @RequestMapping("/produto")
         public class ProdutoController {
 
@@ -26,8 +25,8 @@ package com.api.controlevalidade.controller;
             private ProdutoService produtoService;
 
             @PostMapping
-            public ResponseEntity<ProdutoModel> criarProduto(@Valid @RequestBody ProdutoModel produto) {
-                ProdutoModel criado = produtoService.save(produto);
+            public ResponseEntity<ProdutoModel> criar(@Valid @RequestBody ProdutoModel produto) {
+                ProdutoModel criado = produtoService.salvarProduto(produto);
                 return ResponseEntity.status(HttpStatus.CREATED).body(criado);
             }
 

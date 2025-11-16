@@ -28,7 +28,7 @@ public class PerfilController {
 
 
     @PostMapping
-    public ResponseEntity<PerfilModel> criarPerfil(@Valid @RequestBody PerfilModel perfil) {
+    public ResponseEntity<PerfilModel> criar(@Valid @RequestBody PerfilModel perfil) {
         PerfilModel criado = perfilService.save(perfil);
         return ResponseEntity.status(HttpStatus.CREATED).body(criado);
     }
