@@ -11,7 +11,7 @@ public class CategoriaModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @NotBlank(message = "Nome da categoria é obrigatório!")
     @Size(max = 50, message = "Máximo 50 caracteres.")
@@ -26,11 +26,11 @@ public class CategoriaModel {
     public CategoriaModel() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

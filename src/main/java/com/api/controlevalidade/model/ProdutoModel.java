@@ -2,6 +2,7 @@ package com.api.controlevalidade.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+
 import java.time.LocalDate;
 
 @Entity
@@ -45,37 +46,83 @@ public class ProdutoModel {
     private LocalDate dataAlerta;
 
     @NotNull
-    @ManyToOne( optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "empresa_id", nullable = false)
     private EmpresaModel empresa;
 
-    public ProdutoModel() {}
+    public ProdutoModel() {
+    }
 
     // Getters e setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getMarca() { return marca; }
-    public void setMarca(String marca) { this.marca = marca; }
+    public String getNome() {
+        return nome;
+    }
 
-    public CategoriaModel getCategoria() { return categoria; }
-    public void setCategoria(CategoriaModel categoria) { this.categoria = categoria; }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-    public LocalDate getDataFabricacao() { return dataFabricacao; }
-    public void setDataFabricacao(LocalDate dataFabricacao) { this.dataFabricacao = dataFabricacao; }
+    public String getMarca() {
+        return marca;
+    }
 
-    public LocalDate getDataValidade() { return dataValidade; }
-    public void setDataValidade(LocalDate dataValidade) { this.dataValidade = dataValidade; }
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
 
-    public String getLote() { return lote; }
-    public void setLote(String lote) { this.lote = lote; }
+    public CategoriaModel getCategoria() {
+        return categoria;
+    }
 
-    public LocalDate getDataAlerta() { return dataAlerta; }
-    public void setDataAlerta(LocalDate dataAlerta) { this.dataAlerta = dataAlerta; }
+    public void setCategoria(CategoriaModel categoria) {
+        this.categoria = categoria;
+    }
 
-    public EmpresaModel getEmpresa() { return empresa; }
-    public void setEmpresa(EmpresaModel empresa) { this.empresa = empresa; }
+    public LocalDate getDataFabricacao() {
+        return dataFabricacao;
+    }
+
+    public void setDataFabricacao(LocalDate dataFabricacao) {
+        this.dataFabricacao = dataFabricacao;
+    }
+
+    public LocalDate getDataValidade() {
+        return dataValidade;
+    }
+
+    public void setDataValidade(LocalDate dataValidade) {
+        this.dataValidade = dataValidade;
+    }
+
+    public String getLote() {
+        return lote;
+    }
+
+    public void setLote(String lote) {
+        this.lote = lote;
+    }
+
+    public LocalDate getDataAlerta() {
+        return dataAlerta;
+    }
+
+    public void setDataAlerta(LocalDate dataAlerta) {
+        this.dataAlerta = dataAlerta;
+    }
+
+    public EmpresaModel getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(EmpresaModel empresa) {
+        this.empresa = empresa;
+    }
 }

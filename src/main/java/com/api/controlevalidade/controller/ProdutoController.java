@@ -1,41 +1,40 @@
 package com.api.controlevalidade.controller;
 
-        import com.api.controlevalidade.model.ProdutoModel;
-        import com.api.controlevalidade.service.ProdutoService;
-        import jakarta.validation.Valid;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.http.HttpStatus;
-        import org.springframework.http.ResponseEntity;
-        import org.springframework.validation.FieldError;
-        import org.springframework.web.bind.MethodArgumentNotValidException;
-        import org.springframework.web.bind.annotation.ExceptionHandler;
-        import org.springframework.web.bind.annotation.PostMapping;
-        import org.springframework.web.bind.annotation.RequestBody;
-        import org.springframework.web.bind.annotation.RequestMapping;
-        import org.springframework.web.bind.annotation.RestController;
+import com.api.controlevalidade.model.EmpresaModel;
+import com.api.controlevalidade.model.ProdutoModel;
+import com.api.controlevalidade.service.ProdutoService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 
-        import java.util.HashMap;
-        import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-        @RestController
-        @RequestMapping("/produto")
-        public class ProdutoController {
+@RestController
+@RequestMapping("/produto")
+@PreAuthorize("hasRole('USUARIO') or hasRole('ADMINISTRADOR')")
+public class ProdutoController {
 
-            @Autowired
-            private ProdutoService produtoService;
+    @Autowired
+    private ProdutoService produtoService;
 
-            @PostMapping
-            public ResponseEntity<ProdutoModel> criar(@Valid @RequestBody ProdutoModel produto) {
-                ProdutoModel criado = produtoService.salvarProduto(produto);
-                return ResponseEntity.status(HttpStatus.CREATED).body(criado);
-            }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.put(error.getField(), error.getDefaultMessage());
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    @PostMapping("/cadastro")
+    @PreAuthorize("hasRole('USUARIO') or hasRole('ADMINISTRADOR')")
+    public ResponseEntity<String> criar(@Valid @RequestBody ProdutoModel produto) {
+        produtoService.salvarProduto(produto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Produto criado com sucesso!");
     }
-        }
+
+    @GetMapping
+    @PreAuthorize("hasRole('USUARIO') or hasRole('ADMINISTRADOR')")
+    public ResponseEntity<List<ProdutoModel>> listarProdutos() {
+        List<ProdutoModel> produto = produtoService.buscarTodos();
+        return ResponseEntity.ok(produto);
+    }
+}
