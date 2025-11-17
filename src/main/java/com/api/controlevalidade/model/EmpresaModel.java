@@ -32,7 +32,8 @@ public class EmpresaModel {
     @Column(nullable = false, unique = true, length = 20)
     private String cnpj;
 
-    public EmpresaModel() {}
+    public EmpresaModel() {
+    }
 
     public Long getId() {
         return id;

@@ -1,44 +1,85 @@
 package com.api.controlevalidade.controller;
 
+import com.api.controlevalidade.config.security.TokenService;
+import com.api.controlevalidade.exception.custom.CredenciaisInvalidasException;
+import com.api.controlevalidade.model.EmpresaModel;
+import com.api.controlevalidade.model.dto.LoginResponseDTO;
 import com.api.controlevalidade.model.PerfilModel;
-import com.api.controlevalidade.model.ProdutoModel;
+import com.api.controlevalidade.service.EmpresaService;
 import com.api.controlevalidade.service.PerfilService;
-import com.api.controlevalidade.service.ProdutoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/perfil")
 public class PerfilController {
+    @Autowired
+    private EmpresaService empresaService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    TokenService tokenService;
+    @Autowired
+    private PerfilService perfilService;
 
 
-    private final PerfilService perfilService;
-
-    public PerfilController(PerfilService perfilService) {
-        this.perfilService = perfilService;
-    }
-
-
-    @PostMapping
-    public ResponseEntity<PerfilModel> criar(@Valid @RequestBody PerfilModel perfil) {
-        PerfilModel criado = perfilService.save(perfil);
-        return ResponseEntity.status(HttpStatus.CREATED).body(criado);
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.put(error.getField(), error.getDefaultMessage());
+    @PostMapping("/cadastro")
+    public ResponseEntity<String> criar(@Valid @RequestBody PerfilModel perfil) {
+        if (perfilService.existsByNomePerfil(perfil.getNomePerfil())) {
+            return ResponseEntity.badRequest().body("Perfil já existe!");
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+
+        String encryptedPassword = passwordEncoder.encode(perfil.getSenha());
+        PerfilModel novoPerfil = new PerfilModel(perfil.getNomePerfil(), encryptedPassword, perfil.getTipoPerfil());
+        perfilService.save(novoPerfil);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Perfil criado com sucesso!");
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody PerfilModel login) {
+        try {
+            var usernamePassword = new UsernamePasswordAuthenticationToken(
+                    login.getNomePerfil(),
+                    login.getSenha()
+            );
+
+            var authentication = authenticationManager.authenticate(usernamePassword);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String token = tokenService.generateToken(userDetails);
+
+            return ResponseEntity.ok(new LoginResponseDTO(token));
+        } catch (BadCredentialsException ex) {
+            throw new CredenciaisInvalidasException("Usuário ou senha inválidos. Verifique suas credenciais e tente novamente.");
+        }
+    }
+
+    @PostMapping("/{empresaId}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    public ResponseEntity<String> criarPerfilParaEmpresa(
+            @PathVariable Long empresaId,
+            @Valid @RequestBody PerfilModel novoPerfil) {
+
+        EmpresaModel empresa = empresaService.buscarPorId(empresaId);
+        novoPerfil.setEmpresa(empresa);
+
+        String senhaCriptografada = passwordEncoder.encode(novoPerfil.getSenha());
+        novoPerfil.setSenha(senhaCriptografada);
+
+        perfilService.save(novoPerfil);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Perfil criado para a empresa com sucesso!");
+    }
+
 }
