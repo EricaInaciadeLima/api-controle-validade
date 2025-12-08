@@ -162,5 +162,21 @@ O usuário administrador tem permissões ampliadas (criação de empresa, catego
 - Geração automática de data de alerta  
 - Perfis com permissões diferentes  
 - Login e geração de token JWT  
-- Filtros por validade, empresa, categoria  
+- Filtros por validade, empresa, categoria
+
+
+## 📄 Documentação da API
+
+A documentação completa da API está disponível no Postman:
+
+🔗 **[https://documenter.getpostman.com/view/20353568/2sB3WwpcgQ](https://documenter.getpostman.com/view/20353568/2sB3WwpcgQ)**
+
+Nela você encontra:
+
+* Rotas de autenticação
+* Endpoints de produtos, categorias, empresas e perfis
+* Exemplos de requisição e resposta
+* Estrutura de tokens JWT
+* Parâmetros e modelos utilizados
+
 
