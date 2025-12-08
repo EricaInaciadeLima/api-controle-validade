@@ -164,13 +164,3 @@ O usuário administrador tem permissões ampliadas (criação de empresa, catego
 - Login e geração de token JWT  
 - Filtros por validade, empresa, categoria  
 
----
-
-## 📄 Licença
-
-Este projeto pode ser versionado usando a licença de sua preferência.
----
-
-
-É só pedir! 🚀
-````
